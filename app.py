@@ -105,20 +105,44 @@ st.header("🔮 Predict Per Capita Income")
 st.write("Enter a year below to get the predicted per capita income in US$.")
 
 year_to_predict = st.number_input(
-    "Enter a Year:", 
-    min_value=df['year'].min(), 
-    max_value=2050, 
-    value=2020, 
+    "Enter a Year:",
+    min_value=int(df['year'].min()),
+    max_value=2050,
+    value=2020,
     step=1,
     help="Select a year to see the predicted per capita income."
 )
 
-if st.button("Calculate Prediction"): 
+if st.button("Calculate Prediction"):
+
     # Predict for the given year
-    prediction = reg.predict([[year_to_predict]])[0]
-    st.success(
-        f"The predicted **Per Capita Income** for **{year_to_predict}** is: "
-        f"<h2 style='color:#4CAF50;'>${prediction:,.2f} USD</h2>", 
-        unsafe_allow_html=True
+    prediction = float(reg.predict([[year_to_predict]])[0])
+
+    # Success message
+    st.success("Prediction calculated successfully!")
+
+    # Display prediction in a styled card
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#e8f5e9;
+            border-left:8px solid #4CAF50;
+            padding:20px;
+            border-radius:10px;
+            margin-top:15px;
+        ">
+            <h3 style="color:#2e7d32; margin-bottom:10px;">
+                📊 Predicted Per Capita Income
+            </h3>
+            <p style="font-size:20px; margin:0;">
+                <strong>Year:</strong> {year_to_predict}
+            </p>
+            <h2 style="color:#1b5e20; margin-top:10px;">
+                💰 ${prediction:,.2f} USD
+            </h2>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
+
     st.balloons()
